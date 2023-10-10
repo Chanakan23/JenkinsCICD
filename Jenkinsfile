@@ -45,12 +45,10 @@ pipeline {
                 label 'test'
             }
             steps {
-                echo 'Logging'
-                sh 'docker login registry.gitlab.com'
                 echo 'Build Images'
-                sh 'cd app && docker build -t registry.gitlab.com/sasihan/jenkinscicdtesting .'
+                sh 'cd app && docker build -t registry.gitlab.com/group11271940/testproject .'
                 echo 'Push Images'
-                sh 'docker push registry.gitlab.com/sasihan/jenkinscicdtesting'
+                sh 'docker push registry.gitlab.com/group11271940/testproject'
             }
         }
         stage('Clean Workspace') {
@@ -65,7 +63,7 @@ pipeline {
         }
         stage('Stop and Remove Docker Container') {
             agent {
-                label 'pre-prod'
+                label 'pre'
             }
             steps {
                 echo 'Show Docker running'
@@ -78,13 +76,13 @@ pipeline {
         }
         stage('Run Docker Container') {
             agent {
-                label 'pre-prod'
+                label 'pre'
             }
             steps {
                 echo 'Pull Image from Gitlab'
-                sh 'docker pull registry.gitlab.com/sasihan/jenkinscicdtesting'
+                sh 'docker pull registry.gitlab.com/group11271940/testproject'
                 echo 'Run Contrainer'
-                sh 'docker run -d -p 5000:5000 registry.gitlab.com/sasihan/jenkinscicdtesting'
+                sh 'docker run -d -p 5000:5000 registry.gitlab.com/group11271940/testproject'
             }
         }
     }
